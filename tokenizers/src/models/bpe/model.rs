@@ -53,7 +53,7 @@ impl Default for BpeBuilder {
 }
 
 impl BpeBuilder {
-    /// Constructs a new `BpeBuilder`.
+    /// Constructs a new `BpeBuilder`.f
     pub fn new() -> Self {
         Self::default()
     }
@@ -282,12 +282,12 @@ impl BPE {
     /// Read the given files to extract the vocab and merges
     pub fn read_file(vocab: &str, merges: &str) -> Result<(Vocab, Merges)> {
         // Read vocab.json
-        let vocab_file = File::open(vocab)?;
-        let mut vocab_file = BufReader::new(vocab_file);
+        // let vocab_file = File::open(vocab)?;
+        // let mut vocab_file = BufReader::new(vocab_file);
 
-        let mut buffer = String::new();
-        vocab_file.read_to_string(&mut buffer)?;
-        let json: Value = serde_json::from_str(&buffer)?;
+        // let mut buffer = String::new();
+        // vocab_file.read_to_string(&mut buffer)?;
+        let json: Value = serde_json::from_str(&vocab)?;
         let mut vocab = HashMap::new();
         match json {
             Value::Object(m) => {
@@ -302,11 +302,21 @@ impl BPE {
         };
 
         // Read merges file
-        let merge_file = File::open(merges)?;
-        let merge_file = BufReader::new(merge_file);
+        // let merge_file = File::open(merges)?;
+        let merge_file = BufReader::new(merges.as_bytes());
         let merges = ResultShunt::process(merge_file.lines(), |iter| {
             convert_merges_to_hashmap(iter, &vocab)
         })??;
+
+        // let merges = for iter in merges.split('\n') {
+        //     convert_merges_to_hashmap(iter, &vocab)
+        // };
+
+        //let merges = convert_merges_to_hashmap(merges.lines().collect(), &vocab);
+        
+        // let merges = ResultShunt::process(merges.lines().collect(), |iter| {
+        //     convert_merges_to_hashmap(iter, &vocab)
+        // })??;
 
         Ok((vocab, merges))
     }

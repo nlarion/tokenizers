@@ -200,7 +200,7 @@ impl UnigramTrainer {
                 }
             }
         }
-        let suffix = esaxx_rs::suffix(&flat_string).unwrap();
+
 
         //  Basic chars need to be in sentence pieces.
         let mut seed_sentencepieces: Vec<SentencePiece> = vec![];
@@ -208,42 +208,14 @@ impl UnigramTrainer {
         let mut sall_chars: Vec<_> = all_chars.into_iter().map(|(a, b)| (b, a)).collect();
         // Reversed order
         sall_chars.sort_by_key(|&a| Reverse(a));
-        let mut substr_index: Vec<_> = suffix
-            .iter()
-            .filter_map(|(string, freq)| {
-                if string.len() <= 1 {
-                    return None;
-                }
-                if string.contains(&c_sentence_boundary) {
-                    return None;
-                }
-                if !self.is_valid_sentencepiece(string) {
-                    return None;
-                }
-                let score = freq * string.len() as u32;
-                // if let Some(p) = &progress {
-                //     p.inc(1);
-                // }
-                Some((score, string))
-            })
-            .collect();
+
 
         // Fill seed_sentencepieces
         for (count, character) in sall_chars {
             seed_sentencepieces.push((character.to_string(), count.into()));
         }
 
-        // sort by decreasing score
-        substr_index.sort_by_key(|&a| Reverse(a));
-        for (score, char_string) in substr_index {
-            // Just in case
-            assert!(self.is_valid_sentencepiece(char_string));
-            let string: String = char_string.iter().collect();
-            seed_sentencepieces.push((string, score.into()));
-            if seed_sentencepieces.len() >= self.seed_size {
-                break;
-            }
-        }
+
         to_log_prob(&mut seed_sentencepieces);
         seed_sentencepieces
     }

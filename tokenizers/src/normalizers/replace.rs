@@ -1,5 +1,5 @@
 use crate::tokenizer::{NormalizedString, Normalizer, Result};
-use onig::Regex;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 /// Represents the different patterns that `Replace` can use
