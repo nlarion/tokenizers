@@ -8,4 +8,4 @@
 in your Cargo.toml:
 ```rust
 [dependencies]
-tokenizers = { version="*", git = "https://github.com/nlarion/tokenizers/tokenizers" }
+tokenizers = { version="*", git = "https://github.com/nlarion/tokenizers" }
