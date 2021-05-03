@@ -392,9 +392,8 @@ impl Tokenizer {
     > {
         self.0
     }
-    pub fn from_file<P: AsRef<Path>>(file: P) -> Result<Self> {
-        let content = read_to_string(file)?;
-        Ok(serde_json::from_str(&content)?)
+    pub fn from_file(s: &str) -> Result<Self> {
+        Ok(serde_json::from_str(s)?)
     }
 }
 
@@ -1112,9 +1111,8 @@ where
     D: DeserializeOwned + Decoder,
 {
     /// Instantiate a new Tokenizer from the given file
-    pub fn from_file<P: AsRef<Path>>(file: P) -> Result<Self> {
-        let content = read_to_string(file)?;
-        Ok(serde_json::from_str(&content)?)
+    pub fn from_file(s: &str) -> Result<Self> {
+        Ok(serde_json::from_str(s)?)
     }
 }
 
